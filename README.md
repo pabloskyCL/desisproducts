@@ -64,5 +64,5 @@ recordar agregar la pagina a apache2
 
 modificar archivo Database.php con la información correspondiente a su usuario de mysql que va a utilizar 
 
-ingresar a phpmyadmin y importar la base de datos con el archivo dump.sql
+ingresar a pgadmin y importar la base de datos con el archivo dump.bak
 
