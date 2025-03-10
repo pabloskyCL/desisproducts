@@ -29,6 +29,7 @@ class Response
     public function json($obj = null)
     {
         header('Content-Type: application/json');
+        http_response_code($this->code ?? 0);
         if (isset($obj)) {
             return json_encode($obj);
         }

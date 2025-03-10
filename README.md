@@ -24,10 +24,10 @@ debe quedar parecido a esto cambiando los directorio a los que corresponde y el 
 ```
 <VirtualHost *:80>
     ServerAdmin pabloskiquiroz@gmail.com
-    DocumentRoot /home/pablosky-cl/pruebas_tecnicas/desis
-    ServerName pruebaTecnica.local
+    DocumentRoot /home/pablosky-cl/pruebas_tecnicas/desisproducts
+    ServerName desisproducts.local
 
-    <Directory /home/pablosky-cl/pruebas_tecnicas/desis>
+    <Directory /home/pablosky-cl/pruebas_tecnicas/desisproducts>
         Options Indexes FollowSymLinks
         AllowOverride All
         Require all granted
@@ -60,7 +60,7 @@ en caso de tener problema de permisos:
 
 sudo chmod -R g+w /home/tu-carpeta-home/tu ruta raiz del proyecto
 
-
+recordar agregar la pagina a apache2 
 
 modificar archivo Database.php con la información correspondiente a su usuario de mysql que va a utilizar 
 

@@ -4,7 +4,7 @@ class Database
 {
     private $host = 'localhost';
     private $user = 'postgres';
-    private $pass = '';
+    private $pass = 'password';
     private $dbname = 'products';
     private $dbh;
     private $error;
@@ -22,7 +22,6 @@ class Database
             $this->dbh = new PDO($dsn, $this->user, $this->pass, $options);
         } catch (\PDOException $e) {
             $this->error = $e->getMessage();
-            echo $this->error;
         }
     }
 
@@ -55,6 +54,21 @@ class Database
     public function execute()
     {
         return $this->stmt->execute();
+    }
+
+    public function initTransaction()
+    {
+        return $this->dbh->beginTransaction();
+    }
+
+    public function endTransaction()
+    {
+        return $this->dbh->commit();
+    }
+
+    public function cancelTransaction()
+    {
+        return $this->dbh->rollBack();
     }
 
     public function single()

@@ -8,75 +8,82 @@ use app\Http\URL;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/resources/views/styles.css" >
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <title>Registro de productos</title>
 </head>
 <body>
-    <h1>Formulario de productos</h1>
-    <p id="error"></p>
-    <form action="" id="registro-producto">
-        <div>
-        <label for="codigo">Codigo</label>
-        <input id="codigo" name="codigo" type="text">
+<div class="container">
+      <form id="registro-producto" class="product-form">
+        <h2>Formulario de Producto</h2>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="codigo">Código</label>
+            <input type="text" id="codigo" name="codigo">
+          </div>
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre">
+          </div>
         </div>
-        <div>
-        <label for="nombre">Nombre</label>
-        <input id="nombre" name="nombre" type="text">
-        </div>
-        <div>
-        <label for="bodega">Bodega</label>
-        <select name="bodega" id="bodega">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="bodega">Bodega</label>
+            <select id="bodega" name="bodega">
             <option value="none">Seleccioné</option>
             <?php
 
  foreach ($data['bodegas'] as $bodega) {?>
                 <option value="<?php echo $bodega->id; ?>"><?php echo $bodega->nombre; ?></option>
                 <?php }?>
-        </select>
-        </div>
-        <div>
-        <label for="sucursal">Sucursal</label>
-        <select name="sucursal" id="sucursales">
-            <option value="">Seleccioné</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="sucursal">Sucursal</label>
+            <select id="sucursales" name="sucursal">
+            <option value="none">Seleccioné</option>
             <!-- agregar los demas con una consulta ajax -->
-        </select>
+            </select>
+          </div>
         </div>
-        <div>
-        <label for="moneda">Moneda</label>
+
+        <div class="form-row">
+          <div class="form-group">
+          <label for="moneda">Moneda</label>
         <select name="moneda" id="moneda">
             <option value="none">Seleccioné</option>
             <?php foreach ($data['monedas'] as $moneda) {?>
                 <option value="<?php echo $moneda->id; ?>"><?php echo $moneda->nombre; ?></option>
                 <?php }?>
         </select>
-        </div>
-        <div>
+          </div>
+          <div class="form-group">
             <label for="precio">Precio</label>
-            <input type="text" name="precio" id="precio">
+            <input type="text" id="precio" name="precio">
+          </div>
         </div>
-        <div>
-                Material del producto
-        
-        <label for="plastico">plastico</label>
-        <input type="checkbox" name="plastico" id="plastico">
-        <label for="metal">Metal</label>
-        <input type="checkbox" name="metal" id="metal">
-        <label for="madera">Madera</label>
-        <input type="checkbox" name="madera" id="madera">
-        <label for="vidrio">Vidrio</label>
-        <input type="checkbox" name="vidrio" id="vidrio">
-        <label for="textil">Textil</label>
-        <input type="checkbox" name="textil" id="textil">
-        </div>
-        <div>
-                <label for="descripcion">Descripcion</label>
-                <textarea name="descripcion" id="descripcion"></textarea>
-        </div>
-        <div>
-            <input type="submit" value="Votar"/>
-        </div>
-    </form>
 
+        <div class="form-group">
+          <label>Material del Producto</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" id="plastico" name="plastico" value="plastico"> Plástico</label>
+            <label><input type="checkbox" id="metal" name="metal" value="metal"> Metal</label>
+            <label><input type="checkbox" id="madera" name="madera" value="madera"> Madera</label>
+            <label><input type="checkbox" id="vidrio" name="vidrio" value="vidrio"> Vidrio</label>
+            <label><input type="checkbox" id="textil" name="textil" value="textil"> Textil</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion" name="descripcion" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Guardar Producto</button>
+      </form>
+    </div>
     <script>
 
         $(document).ready(function () {
@@ -111,7 +118,7 @@ use app\Http\URL;
                 let bodega = $('select[name="bodega"]').val();
                 let sucursal = $('select[name="sucursal"]').val();
                 let moneda = $('select[name="moneda"]').val();
-                let precio = $('input[name="region"]').val();
+                let precio = $('input[name="precio"]').val();
                 let descripcion = $('textarea[name="descripcion"]').val();
                 let plastico = $('input[name="plastico"]').is(':checked');
                 let metal = $('input[name="metal"]').is(':checked');
@@ -119,6 +126,75 @@ use app\Http\URL;
                 let vidrio = $('input[name="vidrio"]').is(':checked');
                 let textil = $('input[name="textil"]').is(':checked');
 
+                let countchecked = [plastico,metal,madera,vidrio,textil].reduce((acc, value) => {
+                    if(value){
+                        acc++;
+                    }
+                    return acc;
+                },0);
+
+                if(codigo == ''){
+                    alert('el codigo es obligatorio');
+                    return;
+                }
+
+                if(!validarCodigo(codigo)){
+                    alert('el codigo debe tener solo caracteres y tener una longitud minima de 5 caracteres y maxima de 15');
+                    return;
+                }
+
+                if(nombre == ''){
+                    alert('el nombre es obligatorio');
+                    return;
+                }   
+
+                if(!validarNombre(nombre)){
+                    alert('el nombre debe tener solo caracteres y tener una longitud minima de 2 caracteres y maxima de 50');
+                    return;
+                }
+                
+                if(bodega == 'none'){
+                    alert('debe seleccionar una bodega');
+                    return;
+                }
+
+                if(sucursal == 'none'){
+                    alert('debe seleccionar una sucursal');
+                    return;
+                }
+
+                if(moneda == 'none'){
+                    alert('debe seleccionar una moneda');
+                    return;
+                }
+
+                if(precio == ''){
+                    alert('el precio es obligatorio');
+                    return;
+                }
+        
+                if(!validarPrecio(precio)){
+                    alert('el precio debe ser un numero y tener maximo 2 decimales');
+                    return;
+                }
+
+                if(countchecked < 2){
+                    alert('debe seleccionar al menos 2 materiales');
+                    return;
+                }
+                
+                if(descripcion == ''){
+                    alert('la descripcion es obligatoria');
+                    return;
+                }
+
+                if(!validarDescripcion(descripcion)){
+                    alert('la descripcion debe tener una longitud minima de 10 caracteres y maxima de 1000');
+                    return;
+                }
+
+
+                 
                 $.ajax({
                     method: 'POST',
                     url: '<?php echo URL::base(); ?>/producto',
@@ -136,11 +212,38 @@ use app\Http\URL;
                         }
                     },
                     success: function (data) {
-                        
+                        alert('producto guardado con exito');
+                    },
+                    error: function (error) {
+                        let response = error.responseJSON;
+                        if(response.data.code == "23505"){
+                            alert('el codigo ya existe');
+                        }
                     }
                 })
             })
         })
+
+
+    function validarCodigo(codigo) {
+        const regex = /^[a-zA-Z0-9]{5,15}$/;
+        return regex.test(codigo);
+    }
+
+    function validarNombre(nombre){
+        const regex = /^[a-zA-Z0-9 ]{2,50}$/;
+        return regex.test(nombre);
+    }
+
+    function validarPrecio(precio) {
+    const regex = /^\d+(\.\d{1,2})?$/;
+    return regex.test(String(precio));
+    }
+
+    function validarDescripcion(descripcion) {
+    const regex = /^.{10,1000}$/s;
+    return regex.test(descripcion);
+    }
 
 
 

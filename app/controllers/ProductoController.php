@@ -41,8 +41,6 @@ class ProductoController extends Controller
                     'textil' => 'true' == $request->checkboxs->textil ? true : false,
         ];
 
-        var_dump($request->bodega);
-
         $checked = array_filter($chks, function ($k) {
             return true == $k;
         });
@@ -59,9 +57,6 @@ class ProductoController extends Controller
             echo throw new \Exception('El alias debe tener mas de 5 caracteres y debe contener solo letras y numeros', 1);
         }
 
-        // if (!self::validaRut($request->rut)) {
-        //     echo throw new \Exception('el rut tiene que estar en este formato 19192332-4', 1);
-        // }
         if ('none' == $request->bodega) {
             echo throw new \Exception('Debe seleccionar una región', 1);
         }
@@ -84,36 +79,22 @@ class ProductoController extends Controller
             'materiales' => join(',', array_keys($checked)),
             'moneda' => intval($request->moneda),
             'precio' => intval($request->precio),
-            'descripcion' => intval($request->descripcion),
+            'descripcion' => $request->descripcion,
         ];
 
         $producto = new Producto();
-        var_dump($data);
+
         $result = $producto->nuevoProducto($data);
         header('Content-Type: application/json');
+        if (isset($result['error'])) {
+            $response = new Response(500,EMessages::ERROR);
+            $response->setData($result);
+            echo $response->json();
+
+            return;
+        }
         $response = new Response(EMessages::CORRECT);
         $response->setData($result);
         echo $response->json();
     }
-
-    public static function validaRut($rutCompleto)
-    {
-        if (!preg_match('/^[0-9]+-[0-9kK]{1}/', $rutCompleto)) {
-            return false;
-        }
-        $rut = explode('-', $rutCompleto);
-
-        return strtolower($rut[1]) == self::dv($rut[0]);
-    }
-
-        public static function dv($T)
-        {
-            $M = 0;
-            $S = 1;
-            for (; $T; $T = floor($T / 10)) {
-                $S = ($S + $T % 10 * (9 - $M++ % 6)) % 11;
-            }
-
-            return $S ? $S - 1 : 'k';
-        }
 }
