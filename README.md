@@ -1,25 +1,23 @@
-Configuración para levantar proyecto en local en ubuntu: 
-
-
+Configuración para levantar proyecto en local en ubuntu:
 
 requisito tener instalado lo siguiente:
 
-* php 8.1
-* mySQL 8.0
-* extensiones de php
-* apache2
-* activar modulo modprove:
-  * sudo a2enmod rewrite
-  * sudo systemctl restart apache2
-* phpmyadmin
+- php 8.1
+- mySQL 8.0
+- extensiones de php
+- apache2
+- activar modulo modprove:
+  - sudo a2enmod rewrite
+  - sudo systemctl restart apache2
+- pgadmin
 
-para levantar el proyecto primero hay que clonarlo en la carpeta compartida con el servidor web que se indica en  la configuración de apache:
+para levantar el proyecto primero hay que clonarlo en la carpeta compartida con el servidor web que se indica en la configuración de apache:
 
 después hay que crear una configuración para para apache:
 
 /etc/apache2/sites-available/nombre-de -la configuración.conf
 
-debe quedar parecido a esto cambiando los directorio a los que corresponde y el servername puede ser localhost si no se cambia  hosts:
+debe quedar parecido a esto cambiando los directorio a los que corresponde y el servername puede ser localhost si no se cambia hosts:
 
 ```
 <VirtualHost *:80>
@@ -39,7 +37,7 @@ debe quedar parecido a esto cambiando los directorio a los que corresponde y el 
 
 ```
 
-* reiniciar apache sudo systemctl restart apache2
+- reiniciar apache sudo systemctl restart apache2
 
 /etc/hosts:
 
@@ -50,19 +48,20 @@ debe quedar parecido a esto cambiando los directorio a los que corresponde y el 
 127.0.0.1       desisproducts.local
 ```
 
-* reiniciar apache sudo systemctl restart apache2
+- reiniciar apache sudo systemctl restart apache2
 
 agregar el usuario actual al grupo www-data:
 
 sudo usermod -aG www-data tu-usuario
 
-en caso de tener problema de permisos: 
+en caso de tener problema de permisos:
 
 sudo chmod -R g+w /home/tu-carpeta-home/tu ruta raiz del proyecto
 
-recordar agregar la pagina a apache2 
+recordar agregar la pagina a apache2
 
-modificar archivo Database.php con la información correspondiente a su usuario de mysql que va a utilizar 
+modificar archivo Database.php con la información correspondiente a su usuario de mysql que va a utilizar
 
-ingresar a phpmyadmin y importar la base de datos con el archivo dump.sql
+ingresar a pgadmin y crear la base de datos products hacer click derecho en la base de dato y restaurar desde el archivo backup-1
 
+si hay problemas en buscar el archivo desde pgadmin, favor de mover el archivo a la ubicacion por defecto de almacenamiento de backups de pg admin, que es en linux ubuntu la ruta `/var/lib/pgadmin/storage/'usuario con el que se creo la cuenta'/` una vez agregado el archivo debiese poder hacerse el restore de la base de datos.
