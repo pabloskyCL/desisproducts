@@ -32,7 +32,7 @@ use app\Http\URL;
           <div class="form-group">
             <label for="bodega">Bodega</label>
             <select id="bodega" name="bodega">
-            <option value="none">Seleccioné</option>
+            <option value="none"></option>
             <?php
 
  foreach ($data['bodegas'] as $bodega) {?>
@@ -43,8 +43,8 @@ use app\Http\URL;
           <div class="form-group">
             <label for="sucursal">Sucursal</label>
             <select id="sucursales" name="sucursal">
-            <option value="none">Seleccioné</option>
-            <!-- agregar los demas con una consulta ajax -->
+            <option value="none"></option>
+            <!-- agrega las sucursales con una consulta ajax -->
             </select>
           </div>
         </div>
@@ -53,7 +53,7 @@ use app\Http\URL;
           <div class="form-group">
           <label for="moneda">Moneda</label>
         <select name="moneda" id="moneda">
-            <option value="none">Seleccioné</option>
+            <option value="none"></option>
             <?php foreach ($data['monedas'] as $moneda) {?>
                 <option value="<?php echo $moneda->id; ?>"><?php echo $moneda->nombre; ?></option>
                 <?php }?>
@@ -95,7 +95,7 @@ use app\Http\URL;
                     .find('option')
                     .remove()
                     .end()
-                    .append('<option value="none">Seleccioné</option>')
+                    .append('<option value="none"></option>')
                     .val('none');
                     return false;
                 }
@@ -109,7 +109,7 @@ use app\Http\URL;
                     },
                     success: function (data) {
                         $('#sucursales').empty();
-                    
+                        $('#sucursales').append('<option value="none"></option>').attr('selected', 'selected');
                         $.each(data.data.sucursales, function (key, value) {
                             $('#sucursales').append('<option value="' + value.id + '">' + value.nombre + '</option>')
                         });             
@@ -198,9 +198,7 @@ use app\Http\URL;
                     alert('la descripcion debe tener una longitud minima de 10 caracteres y maxima de 1000');
                     return;
                 }
-
-
-                 
+         
                 $.ajax({
                     method: 'POST',
                     url: '<?php echo URL::base(); ?>/producto',
@@ -227,7 +225,7 @@ use app\Http\URL;
                             .find('option')
                             .remove()
                             .end()
-                            .append('<option value="none">Seleccioné</option>')
+                            .append('<option value="none"></option>')
                             .val('none');
                     },
                     error: function (error) {
@@ -265,8 +263,6 @@ use app\Http\URL;
     const regex = /^.{10,1000}$/s;
     return regex.test(descripcion);
     }
-
-
 
     </script>
 </body>
