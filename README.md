@@ -47,7 +47,7 @@ debe quedar parecido a esto cambiando los directorio a los que corresponde y el 
 127.0.0.1       localhost
 ::1             localhost
 127.0.1.1       pop-os.localdomain      pop-os
-127.0.0.1       pruebaTecnica.local
+127.0.0.1       desisproducts.local
 ```
 
 * reiniciar apache sudo systemctl restart apache2
