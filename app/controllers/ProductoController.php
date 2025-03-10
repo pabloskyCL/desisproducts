@@ -45,30 +45,51 @@ class ProductoController extends Controller
             return true == $k;
         });
 
-        if (!$request->codigo) {
-            echo throw new \Exception('El codigo es obligatio', 1);
+        if (!preg_match('/^[a-zA-Z0-9]{5,15}$/', $request->codigo)) {
+            $response = new Response(500, 'El codigo deben ser letras y numeros con un minimo de 5 caracteres y un maximo de 15');
+            echo $response->json();
+
+            return;
         }
 
-        if (!ctype_alnum($request->nombre)) {
-            echo throw new \Exception('El alias debe tener mas de 5 caracteres y debe contener solo letras y numeros', 1);
-        }
+        if (!preg_match('/^[a-zA-Z0-9 ]{2,50}$/', $request->nombre)) {
+            $response = new Response(500, 'El nombre debe tener mas de 5 caracteres y debe contener solo letras y numeros');
+            echo $response->json();
 
-        if (strlen($request->nombre) < 5) {
-            echo throw new \Exception('El alias debe tener mas de 5 caracteres y debe contener solo letras y numeros', 1);
+            return;
         }
 
         if ('none' == $request->bodega) {
-            echo throw new \Exception('Debe seleccionar una región', 1);
+            $response = new Response(500, 'Debe seleccionar una bodega');
+            echo $response->json();
+
+            return;
         }
         if ('none' == $request->sucursal) {
-            echo throw new \Exception('Debe seleccionar una comuna', 1);
+            $response = new Response(500, 'Debe seleccionar una sucursal');
+            echo $response->json();
+
+            return;
         }
         if ('none' == $request->moneda) {
-            echo throw new \Exception('debe seleccionar un candidato', 1);
+            $response = new Response(500, 'Debe seleccionar una moneda');
+            echo $response->json();
+
+            return;
         }
 
         if (count($checked) < 2) {
-            echo throw new \Exception('debe seleccionar almenos 2 influencias', 1);
+            $response = new Response(500, 'Debe seleccionar almenos 2 materiales');
+            echo $response->json();
+
+            return;
+        }
+
+        if (!preg_match('/^.{10,1000}$/s', $request->descripcion)) {
+            $response = new Response(500, 'la descripcion debe tener una longitud minima de 10 caracteres y maxima de 1000');
+            echo $response->json();
+
+            return;
         }
 
         $data = [
@@ -87,7 +108,7 @@ class ProductoController extends Controller
         $result = $producto->nuevoProducto($data);
         header('Content-Type: application/json');
         if (isset($result['error'])) {
-            $response = new Response(500,EMessages::ERROR);
+            $response = new Response(500, EMessages::ERROR);
             $response->setData($result);
             echo $response->json();
 

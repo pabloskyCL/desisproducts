@@ -90,7 +90,13 @@ use app\Http\URL;
 
             $('#bodega').on('change', function () {
                 let bodega = $(this).val();
-                if(bodega == 'none'){
+                if(bodega == "none"){
+                    $('#sucursales')
+                    .find('option')
+                    .remove()
+                    .end()
+                    .append('<option value="none">Seleccioné</option>')
+                    .val('none');
                     return false;
                 }
                 
@@ -213,9 +219,24 @@ use app\Http\URL;
                     },
                     success: function (data) {
                         alert('producto guardado con exito');
+                        $('#registro-producto').each(function(){
+                            this.reset();
+                        });
+
+                        $('#sucursales')
+                            .find('option')
+                            .remove()
+                            .end()
+                            .append('<option value="none">Seleccioné</option>')
+                            .val('none');
                     },
                     error: function (error) {
                         let response = error.responseJSON;
+
+                        if(response.message && response.data == null){
+                            alert(response.message);
+                        }
+
                         if(response.data.code == "23505"){
                             alert('el codigo ya existe');
                         }
